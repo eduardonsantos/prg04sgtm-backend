@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementação das regras de negócio para Pagamento.
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PagamentoService implements PagamentoIService {
 
     private final PagamentoRepository         pagamentoRepository;
@@ -30,7 +32,7 @@ public class PagamentoService implements PagamentoIService {
     // SAVE (baixa manual de boleto)
     // -------------------------------------------------------------------------
     @Override
-    public Pagamento save(Long boletoId, Long usuarioId) {
+    public Pagamento salvar(Long boletoId, Long usuarioId) {
         log.info("Processando baixa manual. BoletoID: {}, UsuarioID: {}", boletoId, usuarioId);
 
         BoletosPrefeitura boleto = boletoRepository.findById(boletoId)
@@ -62,11 +64,24 @@ public class PagamentoService implements PagamentoIService {
         return salvo;
     }
 
+    @Override
+    public Pagamento atualizar(Long id, Pagamento dadosNovos) {
+        log.info("Iniciando processo de atualização do Pagamento ID: {}", id);
+        Pagamento pagamentoExistente = buscarPorId(id);
+        if (dadosNovos.getValorPago() != null) {
+            pagamentoExistente.setValorPago(dadosNovos.getValorPago());
+        }
+        if (dadosNovos.getStatus() != null && !dadosNovos.getStatus().isBlank()) {
+            pagamentoExistente.setStatus(dadosNovos.getStatus());
+        }
+        return pagamentoRepository.save(pagamentoExistente);
+    }
+
     // -------------------------------------------------------------------------
     // FIND BY ID
     // -------------------------------------------------------------------------
     @Override
-    public Pagamento findById(Long id) {
+    public Pagamento buscarPorId(Long id) {
         log.info("Buscando Pagamento ID: {}", id);
         return pagamentoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -77,7 +92,7 @@ public class PagamentoService implements PagamentoIService {
     // FIND BY ATIVO TRUE
     // -------------------------------------------------------------------------
     @Override
-    public List<Pagamento> findByAtivoTrue() {
+    public List<Pagamento> listarAtivos() {
         log.info("Listando todos os Pagamentos ativos.");
         return pagamentoRepository.findByAtivoTrue();
     }
@@ -86,7 +101,7 @@ public class PagamentoService implements PagamentoIService {
     // FIND BY USUARIO
     // -------------------------------------------------------------------------
     @Override
-    public List<Pagamento> findByUsuario(Long usuarioId) {
+    public List<Pagamento> listarPorUsuario(Long usuarioId) {
         log.info("Listando pagamentos do Usuário ID: {}", usuarioId);
         return pagamentoRepository.findByUsuarioIdAndAtivoTrue(usuarioId);
     }
@@ -95,7 +110,7 @@ public class PagamentoService implements PagamentoIService {
     // DELETE — Estorno
     // -------------------------------------------------------------------------
     @Override
-    public void delete(Long id) {
+    public void estornar(Long id) {
         log.info("Iniciando estorno do Pagamento ID: {}", id);
 
         if (id == null || id <= 0) {
@@ -103,22 +118,17 @@ public class PagamentoService implements PagamentoIService {
             throw new IllegalArgumentException("O ID do pagamento é inválido.");
         }
 
-        Pagamento pagamento = findById(id);
+        Pagamento pagamento = buscarPorId(id);
 
         if ("ESTORNADO".equals(pagamento.getStatus())) {
             throw new IllegalArgumentException(
                     "Este pagamento já foi estornado anteriormente.");
         }
 
-        pagamento.setAtivo(false);
-        pagamento.setStatus("ESTORNADO");
-
-        BoletosPrefeitura boleto = pagamento.getBoletoPrefeitura();
-        boleto.setStatus("PENDENTE");
-        boletoRepository.save(boleto);
-
+        pagamento.estornar();
+        boletoRepository.save(pagamento.getBoletoPrefeitura());
         pagamentoRepository.save(pagamento);
         log.info("Pagamento ID {} estornado. Boleto ID {} revertido para PENDENTE.",
-                id, boleto.getId());
+                id, pagamento.getBoletoPrefeitura() != null ? pagamento.getBoletoPrefeitura().getId() : null);
     }
 }

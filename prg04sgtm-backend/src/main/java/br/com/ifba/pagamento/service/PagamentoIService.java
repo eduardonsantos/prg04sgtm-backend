@@ -10,13 +10,15 @@ import java.util.List;
  */
 public interface PagamentoIService {
 
-    Pagamento save(Long boletoId, Long usuarioId);
+    Pagamento salvar(Long boletoId, Long usuarioId);
 
-    Pagamento findById(Long id);
+    Pagamento atualizar(Long id, Pagamento pagamento);
 
-    List<Pagamento> findByAtivoTrue();
+    Pagamento buscarPorId(Long id);
 
-    List<Pagamento> findByUsuario(Long usuarioId);
+    List<Pagamento> listarAtivos();
 
-    void delete(Long id);
+    List<Pagamento> listarPorUsuario(Long usuarioId);
+
+    void estornar(Long id);
 }

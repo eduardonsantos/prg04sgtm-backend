@@ -19,7 +19,7 @@ import lombok.Setter;
  * @author eduar
  */
 @Entity
-@Table(name = "pagamento")
+@Table(name = "tb_pagamento")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -55,7 +55,25 @@ public class Pagamento extends PersistenceEntity {
         this.status           = "APROVADO";
         this.ativo            = true;
 
-        boleto.atualizarStatusParaPago();
+        boleto.quitar();
         return true;
+    }
+
+    /**
+     * Transição de domínio rico: estorno do pagamento e reabertura do boleto.
+     */
+    public void estornar() {
+        this.ativo = false;
+        this.status = "ESTORNADO";
+        if (this.boletoPrefeitura != null) {
+            this.boletoPrefeitura.estornar();
+        }
+    }
+
+    /**
+     * Transição de domínio rico: inativação lógica.
+     */
+    public void inativar() {
+        this.ativo = false;
     }
 }

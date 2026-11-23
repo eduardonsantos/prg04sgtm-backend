@@ -19,7 +19,7 @@ import lombok.Setter;
  * @author eduardo
  */
 @Entity
-@Table(name = "boleto_prefeitura")
+@Table(name = "tb_boleto_prefeitura")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,8 +35,7 @@ public class BoletosPrefeitura extends PersistenceEntity implements GeradorDocum
     @Column(nullable = false)
     private LocalDate dataVencimento;
 
-    //Valores possíveis: "PENDENTE" | "PAGO" | "VENCIDO"
-
+    // Valores possíveis: "PENDENTE" | "PAGO" | "VENCIDO"
     @Column(nullable = false)
     private String status;
 
@@ -47,13 +46,33 @@ public class BoletosPrefeitura extends PersistenceEntity implements GeradorDocum
     @JoinColumn(name = "lancamento_imposto_id", nullable = false)
     private LancamentoImposto lancamentoImposto;
 
-
     public Boolean verificarVencimento() {
         return LocalDate.now().isAfter(this.dataVencimento);
     }
 
-    public void atualizarStatusParaPago() {
+    /**
+     * Transição de domínio rico: liquidação do boleto (quitar).
+     */
+    public void quitar() {
         this.status = "PAGO";
+    }
+
+    /**
+     * Transição de domínio rico: estorno/reabertura do boleto para pendente.
+     */
+    public void estornar() {
+        this.status = "PENDENTE";
+    }
+
+    /**
+     * Transição de domínio rico: inativação lógica do boleto.
+     */
+    public void inativar() {
+        this.ativo = false;
+    }
+
+    public void atualizarStatusParaPago() {
+        quitar();
     }
 
     @Override

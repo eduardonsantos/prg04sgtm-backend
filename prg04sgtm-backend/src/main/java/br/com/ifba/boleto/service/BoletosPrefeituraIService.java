@@ -9,15 +9,19 @@ import java.util.List;
  */
 public interface BoletosPrefeituraIService {
 
-    BoletosPrefeitura findById(Long id);
+    BoletosPrefeitura salvar(BoletosPrefeitura boleto);
 
-    List<BoletosPrefeitura> findByAtivoTrue();
+    BoletosPrefeitura atualizar(Long id, BoletosPrefeitura boleto);
 
-    List<BoletosPrefeitura> findByLancamento(Long lancamentoId);
+    BoletosPrefeitura buscarPorId(Long id);
 
-    List<BoletosPrefeitura> findPending();
+    List<BoletosPrefeitura> listarAtivos();
 
-    BoletosPrefeitura updateStatus(Long id, String novoStatus);
+    List<BoletosPrefeitura> listarPorLancamento(Long lancamentoId);
 
-    void delete(Long id);
+    List<BoletosPrefeitura> listarPendentes();
+
+    BoletosPrefeitura atualizarStatus(Long id, String novoStatus);
+
+    void inativar(Long id);
 }
