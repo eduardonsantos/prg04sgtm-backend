@@ -25,7 +25,9 @@ replay_pid*
 
 # Environment variables
 .env
+.env.*
 *.env
+application-local.properties
 !.env.example
 
 # Postman local workspace
