@@ -9,15 +9,15 @@ import java.util.List;
  */
 public interface ImovelIService {
 
-    Imovel save(Imovel imovel);
+    Imovel salvar(Imovel imovel);
 
-    Imovel update(Long id, Imovel imovel);
+    Imovel atualizar(Long id, Imovel imovel);
 
-    Imovel findById(Long id);
+    Imovel buscarPorId(Long id);
 
-    List<Imovel> findByAtivoTrue();
+    List<Imovel> listarAtivos();
 
-    List<Imovel> findByContribuinteIdAndAtivoTrue(Long contribuinteId);
+    List<Imovel> listarPorContribuinteAtivo(Long contribuinteId);
 
-    void deletar(Long id);
+    void inativar(Long id);
 }

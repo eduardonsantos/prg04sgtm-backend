@@ -1,7 +1,7 @@
 package br.com.ifba.imovel.service;
 
 import br.com.ifba.contribuinte.entity.Contribuinte;
-import br.com.ifba.contribuinte.entity.Endereco;
+import br.com.ifba.endereco.entity.Endereco;
 import br.com.ifba.contribuinte.repository.ContribuinteRepository;
 import br.com.ifba.infrastructure.util.StringUtil;
 import br.com.ifba.imovel.entity.Imovel;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ImovelService implements ImovelIService {
 
     private final ImovelRepository       imovelRepository;
@@ -28,7 +30,7 @@ public class ImovelService implements ImovelIService {
 
  
     @Override
-    public Imovel save(Imovel imovel) {
+    public Imovel salvar(Imovel imovel) {
         log.info("Iniciando o processo de salvar Imovel.");
         validarImovel(imovel);
 
@@ -49,10 +51,10 @@ public class ImovelService implements ImovelIService {
 
 
     @Override
-    public Imovel update(Long id, Imovel dadosNovos) {
+    public Imovel atualizar(Long id, Imovel dadosNovos) {
         log.info("Iniciando processo de atualização de Imovel para o ID: {}", id);
 
-        Imovel imovelExistente = findById(id);
+        Imovel imovelExistente = buscarPorId(id);
 
         // Verifica unicidade da nova inscrição imobiliária (ignora o próprio registro)
         Optional<Imovel> duplicado =
@@ -98,7 +100,7 @@ public class ImovelService implements ImovelIService {
 
  
     @Override
-    public Imovel findById(Long id) {
+    public Imovel buscarPorId(Long id) {
         log.info("Buscando Imovel de ID: {}.", id);
 
         return imovelRepository.findById(id)
@@ -107,20 +109,20 @@ public class ImovelService implements ImovelIService {
 
 
     @Override
-    public List<Imovel> findByAtivoTrue() {
+    public List<Imovel> listarAtivos() {
         log.info("Listando todos os Imóveis ativos.");
         return imovelRepository.findByAtivoTrue();
     }
 
 
     @Override
-    public List<Imovel> findByContribuinteIdAndAtivoTrue(Long contribuinteId) {
+    public List<Imovel> listarPorContribuinteAtivo(Long contribuinteId) {
         log.info("Listando imóveis ativos do Contribuinte ID: {}", contribuinteId);
         return imovelRepository.findByContribuinteIdAndAtivoTrue(contribuinteId);
     }
 
     @Override
-    public void deletar(Long id) {
+    public void inativar(Long id) {
         log.info("Iniciando a INATIVAÇÃO do Imóvel ID: {}", id);
 
         if (id == null || id <= 0) {
@@ -128,8 +130,8 @@ public class ImovelService implements ImovelIService {
             throw new IllegalArgumentException("O ID do imóvel é inválido.");
         }
 
-        Imovel imovel = findById(id);
-        imovel.setAtivo(false);
+        Imovel imovel = buscarPorId(id);
+        imovel.inativar();
         imovelRepository.save(imovel);
 
         log.info("Imóvel ID {} inativado com sucesso.", id);

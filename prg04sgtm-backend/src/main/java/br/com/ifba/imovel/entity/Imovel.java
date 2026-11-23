@@ -1,7 +1,7 @@
 package br.com.ifba.imovel.entity;
 
 import br.com.ifba.contribuinte.entity.Contribuinte;
-import br.com.ifba.contribuinte.entity.Endereco;
+import br.com.ifba.endereco.entity.Endereco;
 import br.com.ifba.infrastructure.entity.PersistenceEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,7 +20,7 @@ import lombok.Setter;
  * @author eduardo
  */
 @Entity
-@Table(name = "imovel")
+@Table(name = "tb_imovel")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -54,9 +54,23 @@ public class Imovel extends PersistenceEntity {
     private Contribuinte contribuinte;
 
     public Double calcularValorVenal() {
-        //calculo de valor venal
+        // calculo de valor venal
         double valorM2Terreno    = 500.0;  // R$ por m² de terreno
         double valorM2Construcao = 800.0;  // R$ por m² construído
         return (this.areaTerreno * valorM2Terreno) + (this.areaConstruida * valorM2Construcao);
+    }
+
+    /**
+     * Transição de domínio rico: inativação lógica do imóvel.
+     */
+    public void inativar() {
+        this.ativo = false;
+    }
+
+    /**
+     * Transição de domínio rico: reativação do imóvel.
+     */
+    public void ativar() {
+        this.ativo = true;
     }
 }

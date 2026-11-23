@@ -1,4 +1,4 @@
-package br.com.ifba.contribuinte.entity;
+package br.com.ifba.endereco.entity;
 
 import br.com.ifba.infrastructure.entity.PersistenceEntity;
 import jakarta.persistence.Entity;
@@ -13,7 +13,7 @@ import lombok.Setter;
  * @author eduar
  */
 @Entity
-@Table(name = "endereco")
+@Table(name = "tb_endereco")
 @Getter
 @Setter
 @NoArgsConstructor

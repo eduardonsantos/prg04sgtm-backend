@@ -1,7 +1,7 @@
 package br.com.ifba.contribuinte.service;
 
 import br.com.ifba.contribuinte.entity.Contribuinte;
-import br.com.ifba.contribuinte.entity.Endereco;
+import br.com.ifba.endereco.entity.Endereco;
 import br.com.ifba.contribuinte.repository.ContribuinteRepository;
 import br.com.ifba.infrastructure.util.StringUtil;
 import java.util.List;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ContribuinteService implements ContribuinteIService {
 
     private final ContribuinteRepository contribuinteRepository;
@@ -27,7 +29,7 @@ public class ContribuinteService implements ContribuinteIService {
     // SALVAR
     // -------------------------------------------------------------------------
     @Override
-    public Contribuinte save(Contribuinte contribuinte) {
+    public Contribuinte salvar(Contribuinte contribuinte) {
         log.info("Iniciando o processo de salvar Contribuinte.");
         validarContribuinte(contribuinte);
 
@@ -44,10 +46,10 @@ public class ContribuinteService implements ContribuinteIService {
     // ATUALIZAR
     // -------------------------------------------------------------------------
     @Override
-    public Contribuinte update(Long id, Contribuinte dadosNovos) {
+    public Contribuinte atualizar(Long id, Contribuinte dadosNovos) {
         log.info("Iniciando processo de atualização de Contribuinte para o ID: {}", id);
 
-        Contribuinte contribuinteExistente = findById(id);
+        Contribuinte contribuinteExistente = buscarPorId(id);
 
         // Verifica unicidade do CPF/CNPJ novo (ignora o próprio registro)
         Optional<Contribuinte> duplicado = contribuinteRepository.findByCpfCnpj(dadosNovos.getCpfCnpj());
@@ -87,7 +89,7 @@ public class ContribuinteService implements ContribuinteIService {
     // BUSCAR POR ID
     // -------------------------------------------------------------------------
     @Override
-    public Contribuinte findById(Long id) {
+    public Contribuinte buscarPorId(Long id) {
         log.info("Buscando Contribuinte de ID: {}.", id);
 
         return contribuinteRepository.findById(id)
@@ -98,7 +100,7 @@ public class ContribuinteService implements ContribuinteIService {
     // DELETAR (soft-delete)
     // -------------------------------------------------------------------------
     @Override
-    public void delete(Long id) {
+    public void inativar(Long id) {
         log.info("Iniciando a INATIVAÇÃO do Contribuinte ID: {}", id);
 
         if (id == null || id <= 0) {
@@ -106,8 +108,8 @@ public class ContribuinteService implements ContribuinteIService {
             throw new IllegalArgumentException("O ID do contribuinte é inválido.");
         }
 
-        Contribuinte contribuinte = findById(id);
-        contribuinte.setAtivo(false);
+        Contribuinte contribuinte = buscarPorId(id);
+        contribuinte.inativar();
         contribuinteRepository.save(contribuinte);
 
         log.info("Contribuinte ID {} inativado com sucesso.", id);
@@ -117,7 +119,7 @@ public class ContribuinteService implements ContribuinteIService {
     // LISTAR TODOS (apenas ativos)
     // -------------------------------------------------------------------------
     @Override
-    public List<Contribuinte> findByAtivoTrue() {
+    public List<Contribuinte> listarAtivos() {
         log.info("Listando todos os Contribuintes ativos.");
         return contribuinteRepository.findByAtivoTrue();
     }
