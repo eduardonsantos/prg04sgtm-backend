@@ -68,12 +68,47 @@ public class PagamentoService implements PagamentoIService {
     public Pagamento atualizar(Long id, Pagamento dadosNovos) {
         log.info("Iniciando processo de atualização do Pagamento ID: {}", id);
         Pagamento pagamentoExistente = buscarPorId(id);
-        if (dadosNovos.getValorPago() != null) {
-            pagamentoExistente.setValorPago(dadosNovos.getValorPago());
+
+        Long boletoId = dadosNovos.getBoletoPrefeitura().getId();
+        BoletosPrefeitura boletoNovo = boletoRepository.findById(boletoId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Boleto não encontrado no banco de dados."));
+        Long usuarioId = dadosNovos.getUsuario().getId();
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Usuário operador não encontrado no banco de dados."));
+
+        if (Boolean.FALSE.equals(pagamentoExistente.getAtivo())) {
+            throw new IllegalArgumentException("Pagamento não encontrado no banco de dados.");
         }
-        if (dadosNovos.getStatus() != null && !dadosNovos.getStatus().isBlank()) {
-            pagamentoExistente.setStatus(dadosNovos.getStatus());
+
+        BoletosPrefeitura boletoAntigo = pagamentoExistente.getBoletoPrefeitura();
+        Long boletoAntigoId = boletoAntigo == null ? null : boletoAntigo.getId();
+
+        if (boletoId.equals(boletoAntigoId)) {
+            if (!usuarioId.equals(pagamentoExistente.getUsuario().getId())) {
+                pagamentoExistente.setUsuario(usuario);
+                return pagamentoRepository.save(pagamentoExistente);
+            }
+            return pagamentoExistente;
         }
+
+        if (pagamentoRepository.existsByBoletoPrefeituraIdAndAtivoTrue(boletoId)) {
+            throw new IllegalArgumentException(
+                    "Este boleto já possui um pagamento ativo registrado.");
+        }
+        if ("PAGO".equals(boletoNovo.getStatus())) {
+            throw new IllegalArgumentException(
+                    "Este boleto já está marcado como PAGO.");
+        }
+
+        if (boletoAntigo != null) {
+            boletoAntigo.estornar();
+            boletoRepository.save(boletoAntigo);
+        }
+
+        pagamentoExistente.processarBaixaManual(boletoNovo, usuario);
+        boletoRepository.save(boletoNovo);
         return pagamentoRepository.save(pagamentoExistente);
     }
 

@@ -1,9 +1,11 @@
 package br.com.ifba.pagamento.controller;
 
+import br.com.ifba.boleto.entity.BoletosPrefeitura;
 import br.com.ifba.pagamento.dto.PagamentoRequestDto;
 import br.com.ifba.pagamento.dto.PagamentoResponseDto;
 import br.com.ifba.pagamento.entity.Pagamento;
 import br.com.ifba.pagamento.service.PagamentoIService;
+import br.com.ifba.usuario.entity.Usuario;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -89,6 +91,12 @@ public class PagamentoController implements PagamentoIController {
     public ResponseEntity<PagamentoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody PagamentoRequestDto dto) {
         try {
             Pagamento entity = new Pagamento();
+            BoletosPrefeitura boleto = new BoletosPrefeitura();
+            boleto.setId(dto.boletoId());
+            Usuario usuario = new Usuario();
+            usuario.setId(dto.usuarioId());
+            entity.setBoletoPrefeitura(boleto);
+            entity.setUsuario(usuario);
             Pagamento atualizado = pagamentoService.atualizar(id, entity);
             return ResponseEntity.ok(PagamentoResponseDto.deEntidade(atualizado));
         } catch (IllegalArgumentException e) {

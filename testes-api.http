@@ -221,6 +221,9 @@ Content-Type: application/json
   "status": "PENDENTE"
 }
 
+### POST 
+POST http://localhost:8080/api/v1/pagamentos
+
 ### POST - Registrar pagamento
 POST http://localhost:8080/api/v1/pagamentos
 Content-Type: application/json
@@ -229,6 +232,14 @@ Content-Type: application/json
   "boletoId": 1,
   "usuarioId": 1
 }
+
+
+### POST
+GET http://localhost:8080/api/v1/boletos
+
+### POST
+GET http://localhost:8080/api/v1/usuarios
+
 
 ### GET - Listar pagamentos
 GET http://localhost:8080/api/v1/pagamentos
@@ -265,3 +276,19 @@ DELETE http://localhost:8080/api/v1/contribuintes/1
 
 ### DELETE - Inativar usuário
 DELETE http://localhost:8080/api/v1/usuarios/1
+
+### Post
+POST http://localhost:8080/api/v1/pagamentos
+Content-Type: application/json
+
+{ "boletoId": 2, "usuarioId": 1 }
+
+
+### PUT - Atualizar pagamento
+PUT http://localhost:8080/api/v1/pagamentos/2
+Content-Type: application/json
+
+{"boletoId":2,"usuarioId":1}
+
+###
+GET http://localhost:8080/api/v1/boletos
