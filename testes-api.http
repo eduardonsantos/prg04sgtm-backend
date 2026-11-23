@@ -230,12 +230,6 @@ Content-Type: application/json
   "usuarioId": 1
 }
 
-### GET - Listar boletos (teste adicional)
-GET http://localhost:8080/api/v1/boletos
-
-### GET - Listar usuários (teste adicional)
-GET http://localhost:8080/api/v1/usuarios
-
 ### GET - Listar pagamentos
 GET http://localhost:8080/api/v1/pagamentos
 
@@ -360,7 +354,7 @@ Content-Type: application/json
 }
 
 ### GET - Pagamento inexistente (404)
-GET http://localhost:8080
+GET http://localhost:8080/api/v1/pagamentos/99999
 
 ### GET - Pagamento com ID inválido (400)
 GET http://localhost:8080/api/v1/pagamentos/abc
