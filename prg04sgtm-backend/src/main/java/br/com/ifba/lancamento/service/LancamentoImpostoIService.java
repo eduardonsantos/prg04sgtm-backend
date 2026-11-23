@@ -10,15 +10,15 @@ import java.util.List;
  */
 public interface LancamentoImpostoIService {
 
-    LancamentoImposto save(LancamentoImposto lancamento, Integer quantidadeParcelas);
+    LancamentoImposto salvar(LancamentoImposto lancamento, Integer quantidadeParcelas);
 
-    LancamentoImposto update(Long id, LancamentoImposto lancamento);
+    LancamentoImposto atualizar(Long id, LancamentoImposto lancamento);
 
-    LancamentoImposto findById(Long id);
+    LancamentoImposto buscarPorId(Long id);
 
-    List<LancamentoImposto> findByAtivoTrue();
+    List<LancamentoImposto> listarAtivos();
 
     List<LancamentoImposto> findByImovel(Long imovelId);
 
-    void delete(Long id);
+    void inativar(Long id);
 }

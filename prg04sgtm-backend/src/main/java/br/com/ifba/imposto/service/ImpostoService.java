@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -20,22 +21,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ImpostoService implements ImpostoIService {
 
     private final ImpostoRepository impostoRepository;
     private static final Logger log = LoggerFactory.getLogger(ImpostoService.class);
 
     @Override
-    public Imposto save(Imposto imposto) {
+    public Imposto salvar(Imposto imposto) {
         log.info("Salvando novo imposto.");
         validarImposto(imposto);
         return impostoRepository.save(imposto);
     }
 
     @Override
-    public Imposto update(Long id, Imposto dadosNovos) {
+    public Imposto atualizar(Long id, Imposto dadosNovos) {
         log.info("Atualizando imposto ID: {}", id);
-        Imposto impostoExistente = findById(id);
+        Imposto impostoExistente = buscarPorId(id);
 
         impostoExistente.setDescricao(dadosNovos.getDescricao());
         impostoExistente.setAnoExercicio(dadosNovos.getAnoExercicio());
@@ -54,21 +56,21 @@ public class ImpostoService implements ImpostoIService {
     }
 
     @Override
-    public Imposto findById(Long id) {
+    public Imposto buscarPorId(Long id) {
         return impostoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Imposto não encontrado."));
     }
 
     @Override
-    public List<Imposto> findByAtivoTrue() {
+    public List<Imposto> listarAtivos() {
         return impostoRepository.findByAtivoTrue();
     }
 
     @Override
-    public void delete(Long id) {
+    public void inativar(Long id) {
         log.info("Inativando imposto ID: {}", id);
-        Imposto imposto = findById(id);
-        imposto.setAtivo(false);
+        Imposto imposto = buscarPorId(id);
+        imposto.inativar();
         impostoRepository.save(imposto);
     }
 

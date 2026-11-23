@@ -23,7 +23,7 @@ import lombok.Setter;
  * @author Sistema de Tributos
  */
 @Entity
-@Table(name = "lancamento_imposto")
+@Table(name = "tb_lancamento_imposto")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -52,7 +52,6 @@ public class LancamentoImposto extends PersistenceEntity {
     @JoinColumn(name = "imposto_id", nullable = false)
     private Imposto imposto;
 
-
     @OneToMany(mappedBy = "lancamentoImposto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoletosPrefeitura> boletos = new ArrayList<>();
 
@@ -73,7 +72,7 @@ public class LancamentoImposto extends PersistenceEntity {
         for (int i = 1; i <= quantidadeParcelas; i++) {
             BoletosPrefeitura boleto = new BoletosPrefeitura();
             
-            // CORREÇÃO: Gerando um código de barras numérico
+            // Gerando um código de barras numérico
             StringBuilder codigoBarras = new StringBuilder();
             for (int j = 0; j < 44; j++) {
                 codigoBarras.append((int) (Math.random() * 10)); // Sorteia um número de 0 a 9
@@ -87,5 +86,22 @@ public class LancamentoImposto extends PersistenceEntity {
             boleto.setLancamentoImposto(this);
             this.boletos.add(boleto);
         }
+    }
+
+    /**
+     * Transição de domínio rico: inativação lógica do lançamento.
+     */
+    public void inativar() {
+        this.ativo = false;
+        if (this.boletos != null) {
+            this.boletos.forEach(b -> b.setAtivo(false));
+        }
+    }
+
+    /**
+     * Transição de domínio rico: reativação do lançamento.
+     */
+    public void ativar() {
+        this.ativo = true;
     }
 }

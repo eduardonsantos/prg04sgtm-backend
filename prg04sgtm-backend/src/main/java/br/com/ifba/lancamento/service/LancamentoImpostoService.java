@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementação das regras de negócio para LancamentoImposto.
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LancamentoImpostoService implements LancamentoImpostoIService {
 
     private final LancamentoImpostoRepository lancamentoRepository;
@@ -31,10 +33,10 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
     // SAVE
     // -------------------------------------------------------------------------
     @Override
-    public LancamentoImposto save(LancamentoImposto lancamento, Integer quantidadeParcelas) {
+    public LancamentoImposto salvar(LancamentoImposto lancamento, Integer quantidadeParcelas) {
         log.info("Iniciando processo de salvar LancamentoImposto.");
 
-        validateParcelas(quantidadeParcelas);
+        validarParcelas(quantidadeParcelas);
 
         Imovel  imovel  = findImovelById(lancamento.getImovel().getId());
         Imposto imposto = findImpostoById(lancamento.getImposto().getId());
@@ -65,10 +67,10 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
     // UPDATE
     // -------------------------------------------------------------------------
     @Override
-    public LancamentoImposto update(Long id, LancamentoImposto dadosNovos) {
+    public LancamentoImposto atualizar(Long id, LancamentoImposto dadosNovos) {
         log.info("Atualizando LancamentoImposto ID: {}", id);
 
-        LancamentoImposto existente = findById(id);
+        LancamentoImposto existente = buscarPorId(id);
 
         if (dadosNovos.getImposto() != null && dadosNovos.getImposto().getId() != null) {
             Imposto novoImposto = findImpostoById(dadosNovos.getImposto().getId());
@@ -84,7 +86,7 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
 
 
     @Override
-    public LancamentoImposto findById(Long id) {
+    public LancamentoImposto buscarPorId(Long id) {
         log.info("Buscando LancamentoImposto ID: {}", id);
         return lancamentoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -93,7 +95,7 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
 
 
     @Override
-    public List<LancamentoImposto> findByAtivoTrue() {
+    public List<LancamentoImposto> listarAtivos() {
         log.info("Listando todos os LancamentoImpostos ativos.");
         return lancamentoRepository.findByAtivoTrue();
     }
@@ -107,7 +109,7 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
 
 
     @Override
-    public void delete(Long id) {
+    public void inativar(Long id) {
         log.info("Inativando LancamentoImposto ID: {}", id);
 
         if (id == null || id <= 0) {
@@ -115,8 +117,8 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
             throw new IllegalArgumentException("O ID do lançamento é inválido.");
         }
 
-        LancamentoImposto lancamento = findById(id);
-        lancamento.setAtivo(false);
+        LancamentoImposto lancamento = buscarPorId(id);
+        lancamento.inativar();
         lancamentoRepository.save(lancamento);
 
         log.info("LancamentoImposto ID {} inativado com sucesso.", id);
@@ -135,7 +137,7 @@ public class LancamentoImpostoService implements LancamentoImpostoIService {
                         "Imposto de ID " + id + " não encontrado no banco de dados."));
     }
 
-    private void validateParcelas(Integer parcelas) {
+    private void validarParcelas(Integer parcelas) {
         if (parcelas == null || parcelas < 1 || parcelas > 12) {
             throw new IllegalArgumentException(
                     "O número de parcelas deve ser entre 1 e 12.");

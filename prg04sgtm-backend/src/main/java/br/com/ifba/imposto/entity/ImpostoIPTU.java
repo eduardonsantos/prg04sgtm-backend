@@ -19,7 +19,7 @@ import lombok.Setter;
  */
 
 @Entity
-@Table(name = "imposto_iptu")
+@Table(name = "tb_imposto_iptu")
 @Getter
 @Setter
 @NoArgsConstructor

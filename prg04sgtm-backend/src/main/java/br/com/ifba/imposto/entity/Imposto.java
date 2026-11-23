@@ -22,8 +22,8 @@ import lombok.Setter;
  */
 
 @Entity
-@Table(name = "imposto")
-@Inheritance(strategy = InheritanceType.JOINED)  //notação usada para que a questão da heranca seja entendida nas tabelas do banco
+@Table(name = "tb_imposto")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -42,4 +42,18 @@ public abstract class Imposto extends PersistenceEntity {
     // Método abstrato exigido pelo UML. 
     // Cada imposto filho (IPTU, ITBI, etc.) terá sua própria regra de cálculo.
     public abstract Double calcularImposto(Imovel imovel);
+
+    /**
+     * Transição de domínio rico: inativação lógica do imposto.
+     */
+    public void inativar() {
+        this.ativo = false;
+    }
+
+    /**
+     * Transição de domínio rico: reativação do imposto.
+     */
+    public void ativar() {
+        this.ativo = true;
+    }
 }
