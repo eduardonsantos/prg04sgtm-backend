@@ -373,3 +373,60 @@ Content-Type: application/json
   "boletoId": null,
   "usuarioId": null
 }
+
+
+### 1. Listar contribuintes (esperado 200)
+GET http://localhost:8080/api/v1/contribuintes
+
+### 2. Criar contribuinte de teste (esperado 201)
+# @name criar
+POST http://localhost:8080/api/v1/contribuintes
+Content-Type: application/json
+
+{
+  "nome": "Teste Interface",
+  "cpfCnpj": "11144477735",
+  "telefone": "71988887777",
+  "email": "teste.interface@example.com",
+  "endereco": {
+    "logradouro": "Rua do Teste",
+    "numero": "10",
+    "complemento": "Casa",
+    "bairro": "Centro",
+    "cidade": "Salvador",
+    "estado": "BA",
+    "cep": "40000000"
+  }
+}
+
+### 3. Buscar o criado (esperado 200)
+GET http://localhost:8080/api/v1/contribuintes/{{criar.response.body.id}}
+
+### 4. Atualizar o criado (esperado 200)
+PUT http://localhost:8080/api/v1/contribuintes/{{criar.response.body.id}}
+Content-Type: application/json
+
+{
+  "nome": "Teste Interface Atualizado",
+  "cpfCnpj": "11144477735",
+  "telefone": "71988887777",
+  "email": "teste.interface@example.com",
+  "endereco": {
+    "logradouro": "Rua do Teste",
+    "numero": "11",
+    "complemento": "Casa",
+    "bairro": "Centro",
+    "cidade": "Salvador",
+    "estado": "BA",
+    "cep": "40000000"
+  }
+}
+
+### 5. Conferir a atualização (esperado 200, nome "Teste Interface Atualizado")
+GET http://localhost:8080/api/v1/contribuintes/{{criar.response.body.id}}
+
+### 6. Excluir o criado (esperado 204)
+DELETE http://localhost:8080/api/v1/contribuintes/{{criar.response.body.id}}
+
+### 7. Buscar o excluído (esperado 404 ou o comportamento de inativo do projeto)
+GET http://localhost:8080/api/v1/contribuintes/{{criar.response.body.id}}

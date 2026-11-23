@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/contribuintes")
-public class ContribuinteController implements ContribuinteIController {
+public class ContribuinteController {
 
     private final ContribuinteIService contribuinteService;
 
@@ -37,8 +37,12 @@ public class ContribuinteController implements ContribuinteIController {
     /**
      * Responsabilidade: Cadastrar um novo contribuinte no sistema com endereço cascateado.
      * Status HTTP: Retorna 201 Created com o DTO do contribuinte gerado.
+     *
+     * @apiNote Cadastra um novo contribuinte.
+     * @param dto dados do contribuinte a ser cadastrado
+     * @return ResponseEntity com status 201 Created e o DTO do contribuinte criado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<ContribuinteResponseDto> salvar(@Valid @RequestBody ContribuinteRequestDto dto) {
         Contribuinte entity = dto.paraEntidade();
@@ -49,8 +53,11 @@ public class ContribuinteController implements ContribuinteIController {
     /**
      * Responsabilidade: Listar todos os contribuintes com cadastro ativo no sistema.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os contribuintes que estão com status ativo no sistema.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos contribuintes ativos
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<ContribuinteResponseDto>> listarAtivos() {
         List<Contribuinte> ativos = contribuinteService.listarAtivos();
@@ -63,8 +70,12 @@ public class ContribuinteController implements ContribuinteIController {
     /**
      * Responsabilidade: Buscar um contribuinte específico pelo ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se inexistente ou inativo.
+     *
+     * @apiNote Busca um contribuinte pelo seu identificador único (ID).
+     * @param id identificador do contribuinte
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se inexistente ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<ContribuinteResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -84,8 +95,13 @@ public class ContribuinteController implements ContribuinteIController {
     /**
      * Responsabilidade: Atualizar integralmente os dados de um contribuinte e seu respectivo endereço.
      * Status HTTP: Retorna 200 OK com o DTO atualizado se sucesso; retorna 404 Not Found se não existir.
+     *
+     * @apiNote Atualiza os dados de um contribuinte existente.
+     * @param id identificador do contribuinte a ser atualizado
+     * @param dto novos dados do contribuinte
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<ContribuinteResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody ContribuinteRequestDto dto) {
         try {
@@ -103,8 +119,12 @@ public class ContribuinteController implements ContribuinteIController {
     /**
      * Responsabilidade: Realizar exclusão lógica (soft-delete) marcando o contribuinte como inativo (ativo = false).
      * Status HTTP: Retorna 204 No Content se executado com sucesso; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Realiza a exclusão lógica do contribuinte (ativo = false).
+     * @param id identificador do contribuinte
+     * @return ResponseEntity com status 204 No Content se inativado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> inativar(@PathVariable Long id) {
         try {
