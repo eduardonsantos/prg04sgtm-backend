@@ -22,13 +22,12 @@ import lombok.Setter;
  * @author eduardo
  */
 @Entity
-@Table(name = "usuarios")
+@Table(name = "tb_usuario")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario extends PersistenceEntity { 
-    // A persistence comeu o ID haha
 
     @Column(nullable = false)
     private String nome;
@@ -42,9 +41,23 @@ public class Usuario extends PersistenceEntity {
     @Column(name = "nivel_acesso", nullable = false)
     private String nivelAcesso;
     
-    @Column (name = "Ativo", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "ativo", nullable = false, columnDefinition = "boolean default true")
     private Boolean ativo = true;
     
     @OneToMany(mappedBy = "usuario")
     private List<Pagamento> pagamentos = new ArrayList<>();
+
+    /**
+     * Transição de domínio rico: inativação lógica da conta de usuário.
+     */
+    public void inativar() {
+        this.ativo = false;
+    }
+
+    /**
+     * Transição de domínio rico: reativação da conta de usuário.
+     */
+    public void ativar() {
+        this.ativo = true;
+    }
 }

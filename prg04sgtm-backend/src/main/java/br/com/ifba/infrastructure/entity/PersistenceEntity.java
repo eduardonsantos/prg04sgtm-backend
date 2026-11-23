@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 @MappedSuperclass
 @Getter
+@Setter
 @NoArgsConstructor
 public abstract class PersistenceEntity {
     @Id

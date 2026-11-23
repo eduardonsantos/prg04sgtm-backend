@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -20,13 +21,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UsuarioService implements UsuarioIService {
     
     private final UsuarioRepository usuarioRepository;
     
     private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
     @Override
-    public Usuario save(Usuario usuario) {
+    public Usuario salvar(Usuario usuario) {
         log.info("Iniciando o processo de salvar ");
         validarUsuario(usuario);
         Optional<Usuario> usuarioComMesmoLogin = usuarioRepository.findByLogin(usuario.getLogin());
@@ -37,9 +39,9 @@ public class UsuarioService implements UsuarioIService {
     }
 
     @Override
-    public Usuario update(Long id, Usuario dadosNovos) {
+    public Usuario atualizar(Long id, Usuario dadosNovos) {
         log.info("Iniciando processo de atualização de cadastro para o ID: {}", id);
-        Usuario usuarioExistente = findById(id);
+        Usuario usuarioExistente = buscarPorId(id);
 
         //para proteger o ADMIN
         if (usuarioExistente.getLogin().equalsIgnoreCase("admin")) {
@@ -78,7 +80,7 @@ public class UsuarioService implements UsuarioIService {
     }
 
     @Override
-    public Usuario findById(Long id) {
+    public Usuario buscarPorId(Long id) {
         log.info("Buscando usuário de ID: {}.", id);
 
         Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(id);
@@ -91,7 +93,7 @@ public class UsuarioService implements UsuarioIService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void inativar(Long id) {
         log.info("Iniciando a INATIVAÇÃO do usuário ID: {}", id);
    
         if (id == null || id <= 0) {
@@ -99,21 +101,21 @@ public class UsuarioService implements UsuarioIService {
             throw new IllegalArgumentException("O ID do usuário é inválido.");
         }
 
-        Usuario usuario = findById(id);
+        Usuario usuario = buscarPorId(id);
 
         // Bloqueia apenas a conta raiz 'admin', permitindo que administradores excluam outros ADMINs
         if (usuario.getLogin().equalsIgnoreCase("admin")) {
             throw new IllegalArgumentException("Operação negada: Não é permitido inativar a conta do Administrador principal (admin).");
         }
    
-        usuario.setAtivo(false);
+        usuario.inativar();
         usuarioRepository.save(usuario);
 
         log.info("Usuário ID {} inativado com sucesso.", id);
     }
 
     @Override
-    public List<Usuario> findByAtivoTrue() {
+    public List<Usuario> listarAtivos() {
         log.info("Listando todos os usuários.");
 
         List<Usuario> usuarios = usuarioRepository.findByAtivoTrue();
@@ -123,7 +125,7 @@ public class UsuarioService implements UsuarioIService {
     
     // Método para ser usado pela tela de login
     @Override
-    public Usuario authenticate(String login, String senha) {
+    public Usuario autenticar(String login, String senha) {
         Usuario usuario = usuarioRepository.findByLogin(login).orElseThrow(() -> new IllegalArgumentException("Erro: Usuário não encontrado."));
     
         // NOVA VERIFICAÇÃO: Ele está ativo?

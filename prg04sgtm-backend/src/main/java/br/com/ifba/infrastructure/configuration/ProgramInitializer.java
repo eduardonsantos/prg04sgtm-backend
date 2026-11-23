@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.com.ifba.infrastructure.configuration;
 
-import br.com.ifba.usuario.controller.UsuarioIController;
 import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.service.UsuarioIService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,37 +9,32 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- *
- * @author eduar
+ * Cria o usuário administrador inicial quando ainda não há usuários ativos.
  */
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ProgramInitializer implements CommandLineRunner {//implementar essa classe faz com que esse código seja executado antes de tudo basicamente
-    private final UsuarioIController usuarioController;
+public class ProgramInitializer implements CommandLineRunner {
+    private final UsuarioIService usuarioService;
 
-   
     @Override
-    public void run(String... args) throws Exception {//essa anotação vem junto da classe quando implementamos o commandline, só codar aqui dentro
+    public void run(String... args) {
         log.info("Iniciando verificação do sistema...");
-        
-        try {
-            // Tenta listar. Se o Service der erro por estar vazio, ele pula para o 'catch'
-            usuarioController.findByAtivoTrue();
+
+        List<Usuario> usuariosAtivos = usuarioService.listarAtivos();
+        if (!usuariosAtivos.isEmpty()) {
             log.info("O banco de dados já possui usuários. Nenhuma ação necessária.");
-            
-        } catch (IllegalArgumentException e) {
-            // Se caiu aqui, é porque o Service gritou que está vazio:
-            log.info("Banco vazio detectado. Criando Admin...");
-            
-            Usuario admin = new Usuario();
-            admin.setNome("Administrador");
-            admin.setLogin("admin");
-            admin.setSenha("admin123");
-            admin.setNivelAcesso("ADMIN");
-            
-            usuarioController.save(admin);
-            log.info("Administrador criado com sucesso!");
+            return;
         }
+
+        log.info("Banco vazio detectado. Criando administrador...");
+        Usuario administrador = new Usuario();
+        administrador.setNome("Administrador");
+        administrador.setLogin("admin");
+        administrador.setSenha("admin123");
+        administrador.setNivelAcesso("ADMIN");
+
+        usuarioService.salvar(administrador);
+        log.info("Administrador criado com sucesso!");
     }
 }
