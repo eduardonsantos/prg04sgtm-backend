@@ -6,7 +6,9 @@ import br.com.ifba.lancamento.entity.LancamentoImposto;
 import br.com.ifba.lancamento.service.LancamentoImpostoIService;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/lancamentos
  */
 @RestController
-@RequestMapping("/api/v1/lancamentos")
+@RequestMapping(path = "/api/v1/lancamentos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class LancamentoImpostoController {
 
     private final LancamentoImpostoIService lancamentoService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public LancamentoImpostoController(LancamentoImpostoIService lancamentoService) {
-        this.lancamentoService = lancamentoService;
-    }
 
     /**
      * Responsabilidade: Realizar o lançamento tributário de um imóvel, calculando o valor venal e gerando boletos.

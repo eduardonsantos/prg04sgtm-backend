@@ -6,7 +6,9 @@ import br.com.ifba.contribuinte.entity.Contribuinte;
 import br.com.ifba.contribuinte.service.ContribuinteIService;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/contribuintes
  */
 @RestController
-@RequestMapping("/api/v1/contribuintes")
+@RequestMapping(path = "/api/v1/contribuintes", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class ContribuinteController {
 
     private final ContribuinteIService contribuinteService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public ContribuinteController(ContribuinteIService contribuinteService) {
-        this.contribuinteService = contribuinteService;
-    }
 
     /**
      * Responsabilidade: Cadastrar um novo contribuinte no sistema com endereço cascateado.

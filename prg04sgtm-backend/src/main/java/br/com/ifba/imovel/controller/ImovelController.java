@@ -6,7 +6,9 @@ import br.com.ifba.imovel.entity.Imovel;
 import br.com.ifba.imovel.service.ImovelIService;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/imoveis
  */
 @RestController
-@RequestMapping("/api/v1/imoveis")
+@RequestMapping(path = "/api/v1/imoveis", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class ImovelController {
 
     private final ImovelIService imovelService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public ImovelController(ImovelIService imovelService) {
-        this.imovelService = imovelService;
-    }
 
     /**
      * Responsabilidade: Cadastrar um novo imóvel associado a um contribuinte proprietário.

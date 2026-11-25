@@ -6,7 +6,9 @@ import br.com.ifba.imposto.entity.Imposto;
 import br.com.ifba.imposto.service.ImpostoIService;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/impostos
  */
 @RestController
-@RequestMapping("/api/v1/impostos")
+@RequestMapping(path = "/api/v1/impostos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class ImpostoController {
 
     private final ImpostoIService impostoService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public ImpostoController(ImpostoIService impostoService) {
-        this.impostoService = impostoService;
-    }
 
     /**
      * Responsabilidade: Cadastrar uma nova definição de imposto e suas alíquotas de cálculo.

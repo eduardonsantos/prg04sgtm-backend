@@ -7,7 +7,9 @@ import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/usuarios
  */
 @RestController
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping(path = "/api/v1/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioIService usuarioService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public UsuarioController(UsuarioIService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
 
     /**
      * Responsabilidade: Cadastrar um novo usuário com nível de acesso (ADMIN, FISCAL ou ATENDENTE).

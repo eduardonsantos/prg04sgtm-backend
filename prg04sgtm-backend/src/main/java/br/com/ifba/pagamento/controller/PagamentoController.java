@@ -8,7 +8,9 @@ import br.com.ifba.pagamento.service.PagamentoIService;
 import br.com.ifba.usuario.entity.Usuario;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,17 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/pagamentos
  */
 @RestController
-@RequestMapping("/api/v1/pagamentos")
+@RequestMapping(path = "/api/v1/pagamentos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class PagamentoController {
 
     private final PagamentoIService pagamentoService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public PagamentoController(PagamentoIService pagamentoService) {
-        this.pagamentoService = pagamentoService;
-    }
 
     /**
      * Responsabilidade: Registrar baixa manual de pagamento em um boleto da prefeitura.

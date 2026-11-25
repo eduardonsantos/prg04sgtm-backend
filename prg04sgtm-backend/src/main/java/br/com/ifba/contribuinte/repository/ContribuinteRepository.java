@@ -1,7 +1,6 @@
 package br.com.ifba.contribuinte.repository;
 
 import br.com.ifba.contribuinte.entity.Contribuinte;
-import br.com.ifba.contribuinte.entity.Contribuinte;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

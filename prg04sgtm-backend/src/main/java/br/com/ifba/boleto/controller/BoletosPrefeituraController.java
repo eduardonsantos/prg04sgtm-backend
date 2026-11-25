@@ -7,7 +7,9 @@ import br.com.ifba.boleto.entity.BoletosPrefeitura;
 import br.com.ifba.boleto.service.BoletosPrefeituraIService;
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,17 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Mapeado para o caminho plural em português sem acentos: /api/v1/boletos
  */
 @RestController
-@RequestMapping("/api/v1/boletos")
+@RequestMapping(path = "/api/v1/boletos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class BoletosPrefeituraController {
 
     private final BoletosPrefeituraIService boletoService;
-
-    /**
-     * Injeção de dependência via construtor com imports explícitos.
-     */
-    public BoletosPrefeituraController(BoletosPrefeituraIService boletoService) {
-        this.boletoService = boletoService;
-    }
 
     /**
      * Responsabilidade: Emitir ou cadastrar manualmente um boleto da prefeitura.
