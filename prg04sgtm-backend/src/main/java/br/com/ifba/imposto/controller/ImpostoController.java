@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/impostos")
-public class ImpostoController implements ImpostoIController {
+public class ImpostoController {
 
     private final ImpostoIService impostoService;
 
@@ -37,8 +37,12 @@ public class ImpostoController implements ImpostoIController {
     /**
      * Responsabilidade: Cadastrar uma nova definição de imposto e suas alíquotas de cálculo.
      * Status HTTP: Retorna 201 Created com o DTO do imposto criado.
+     *
+     * @apiNote Cadastra uma nova configuração tributária de imposto (ex: IPTU com alíquotas).
+     * @param dto dados do imposto a ser cadastrado
+     * @return ResponseEntity com status 201 Created e o DTO do imposto criado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<ImpostoResponseDto> salvar(@Valid @RequestBody ImpostoRequestDto dto) {
         Imposto entity = dto.paraEntidade();
@@ -49,8 +53,11 @@ public class ImpostoController implements ImpostoIController {
     /**
      * Responsabilidade: Listar todos os impostos ativos configurados para tributação.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os impostos que estão com status ativo no sistema.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos impostos ativos
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<ImpostoResponseDto>> listarAtivos() {
         List<Imposto> ativos = impostoService.listarAtivos();
@@ -63,8 +70,12 @@ public class ImpostoController implements ImpostoIController {
     /**
      * Responsabilidade: Buscar um imposto específico pelo ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se inexistente ou inativo.
+     *
+     * @apiNote Busca um imposto pelo seu identificador único (ID).
+     * @param id identificador do imposto
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se inexistente ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<ImpostoResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -84,8 +95,13 @@ public class ImpostoController implements ImpostoIController {
     /**
      * Responsabilidade: Atualizar descrição, ano de exercício e alíquotas do imposto.
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se inexistente.
+     *
+     * @apiNote Atualiza os dados de um imposto existente (descrição, ano de exercício e alíquotas).
+     * @param id identificador do imposto a ser atualizado
+     * @param dto novos dados do imposto
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<ImpostoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody ImpostoRequestDto dto) {
         try {
@@ -103,8 +119,12 @@ public class ImpostoController implements ImpostoIController {
     /**
      * Responsabilidade: Inativar logicamente um imposto (ativo = false).
      * Status HTTP: Retorna 204 No Content se inativado; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Realiza a exclusão lógica do imposto (ativo = false).
+     * @param id identificador do imposto
+     * @return ResponseEntity com status 204 No Content se inativado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> inativar(@PathVariable Long id) {
         try {
