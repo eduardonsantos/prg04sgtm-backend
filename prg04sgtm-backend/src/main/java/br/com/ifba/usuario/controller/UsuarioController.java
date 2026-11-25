@@ -107,6 +107,9 @@ public class UsuarioController {
             Usuario atualizado = usuarioService.atualizar(id, entity);
             return ResponseEntity.ok(UsuarioResponseDto.deEntidade(atualizado));
         } catch (IllegalArgumentException e) {
+            if (e.getMessage() == null || !e.getMessage().toLowerCase().contains("não encontrado")) {
+                throw e;
+            }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -126,6 +129,9 @@ public class UsuarioController {
             usuarioService.inativar(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
+            if (e.getMessage() == null || !e.getMessage().toLowerCase().contains("não encontrado")) {
+                throw e;
+            }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
