@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/usuarios")
-public class UsuarioController implements UsuarioIController {
+public class UsuarioController {
 
     private final UsuarioIService usuarioService;
 
@@ -38,8 +38,12 @@ public class UsuarioController implements UsuarioIController {
     /**
      * Responsabilidade: Cadastrar um novo usuário com nível de acesso (ADMIN, FISCAL ou ATENDENTE).
      * Status HTTP: Retorna 201 Created com o DTO do usuário gerado (senha omitida no retorno).
+     *
+     * @apiNote Cadastra um novo usuário no sistema.
+     * @param dto dados do usuário a ser cadastrado
+     * @return ResponseEntity com status 201 Created e o DTO do usuário criado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<UsuarioResponseDto> salvar(@Valid @RequestBody UsuarioRequestDto dto) {
         Usuario entity = dto.paraEntidade();
@@ -50,8 +54,11 @@ public class UsuarioController implements UsuarioIController {
     /**
      * Responsabilidade: Listar todos os usuários com cadastro ativo no sistema.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os usuários que estão com status ativo.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos usuários
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDto>> listarAtivos() {
         List<Usuario> ativos = usuarioService.listarAtivos();
@@ -64,8 +71,12 @@ public class UsuarioController implements UsuarioIController {
     /**
      * Responsabilidade: Buscar um usuário específico por ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se não existir ou inativo.
+     *
+     * @apiNote Busca um usuário pelo seu identificador único (ID).
+     * @param id identificador do usuário
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se inexistente ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -82,8 +93,13 @@ public class UsuarioController implements UsuarioIController {
     /**
      * Responsabilidade: Atualizar os dados cadastrais (nome, login, nível de acesso e opcionalmente senha).
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se usuário inexistente.
+     *
+     * @apiNote Atualiza os dados cadastrais de um usuário existente.
+     * @param id identificador do usuário a ser atualizado
+     * @param dto novos dados do usuário
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioRequestDto dto) {
         try {
@@ -98,8 +114,12 @@ public class UsuarioController implements UsuarioIController {
     /**
      * Responsabilidade: Inativar a conta de um usuário (ativo = false). Protege a conta raiz 'admin'.
      * Status HTTP: Retorna 204 No Content se inativado com sucesso; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Inativa logicamente a conta de um usuário (ativo = false).
+     * @param id identificador do usuário
+     * @return ResponseEntity com status 204 No Content se inativado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> inativar(@PathVariable Long id) {
         try {
@@ -113,8 +133,12 @@ public class UsuarioController implements UsuarioIController {
     /**
      * Responsabilidade: Validar credenciais de login e retornar dados do usuário autenticado.
      * Status HTTP: Retorna 200 OK com o DTO do usuário se válido; retorna 400 Bad Request se credenciais inválidas.
+     *
+     * @apiNote Autentica um usuário via login e senha.
+     * @param dto credenciais de login
+     * @return ResponseEntity com status 200 OK e o DTO do usuário autenticado
+     * @author eduardo
      */
-    @Override
     @PostMapping("/login")
     public ResponseEntity<UsuarioResponseDto> autenticar(@Valid @RequestBody LoginRequestDto dto) {
         try {
