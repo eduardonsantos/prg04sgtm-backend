@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/imoveis")
-public class ImovelController implements ImovelIController {
+public class ImovelController {
 
     private final ImovelIService imovelService;
 
@@ -37,8 +37,12 @@ public class ImovelController implements ImovelIController {
     /**
      * Responsabilidade: Cadastrar um novo imóvel associado a um contribuinte proprietário.
      * Status HTTP: Retorna 201 Created com o DTO do imóvel criado.
+     *
+     * @apiNote Cadastra um novo imóvel vinculado a um contribuinte.
+     * @param dto dados do imóvel a ser cadastrado
+     * @return ResponseEntity com status 201 Created e o DTO do imóvel criado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<ImovelResponseDto> salvar(@Valid @RequestBody ImovelRequestDto dto) {
         Imovel entity = dto.paraEntidade();
@@ -49,8 +53,11 @@ public class ImovelController implements ImovelIController {
     /**
      * Responsabilidade: Listar todos os imóveis ativos cadastrados na prefeitura.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os imóveis que estão com status ativo no sistema.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos imóveis ativos
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<ImovelResponseDto>> listarAtivos() {
         List<Imovel> ativos = imovelService.listarAtivos();
@@ -63,8 +70,12 @@ public class ImovelController implements ImovelIController {
     /**
      * Responsabilidade: Buscar um imóvel específico pelo ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se inexistente ou inativo.
+     *
+     * @apiNote Busca um imóvel pelo seu identificador único (ID).
+     * @param id identificador do imóvel
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se inexistente ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<ImovelResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -84,8 +95,13 @@ public class ImovelController implements ImovelIController {
     /**
      * Responsabilidade: Atualizar os dados de metragem, valor venal e endereço de um imóvel.
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se não encontrado.
+     *
+     * @apiNote Atualiza os dados de um imóvel existente.
+     * @param id identificador do imóvel a ser atualizado
+     * @param dto novos dados do imóvel
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<ImovelResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody ImovelRequestDto dto) {
         try {
@@ -103,8 +119,12 @@ public class ImovelController implements ImovelIController {
     /**
      * Responsabilidade: Realizar exclusão lógica do imóvel marcando-o como inativo (ativo = false).
      * Status HTTP: Retorna 204 No Content se inativado; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Realiza a exclusão lógica do imóvel (ativo = false).
+     * @param id identificador do imóvel
+     * @return ResponseEntity com status 204 No Content se inativado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> inativar(@PathVariable Long id) {
         try {
