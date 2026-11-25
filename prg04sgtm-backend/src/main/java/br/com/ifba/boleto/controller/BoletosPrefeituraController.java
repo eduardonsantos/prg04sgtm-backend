@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/boletos")
-public class BoletosPrefeituraController implements BoletosPrefeituraIController {
+public class BoletosPrefeituraController {
 
     private final BoletosPrefeituraIService boletoService;
 
@@ -39,8 +39,12 @@ public class BoletosPrefeituraController implements BoletosPrefeituraIController
     /**
      * Responsabilidade: Emitir ou cadastrar manualmente um boleto da prefeitura.
      * Status HTTP: Retorna 201 Created com o DTO do boleto criado.
+     *
+     * @apiNote Emite/cadastra um novo boleto da prefeitura.
+     * @param dto dados do boleto
+     * @return ResponseEntity com status 201 Created e o DTO do boleto criado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<BoletosPrefeituraResponseDto> salvar(@Valid @RequestBody BoletosPrefeituraRequestDto dto) {
         BoletosPrefeitura entity = dto.paraEntidade();
@@ -51,8 +55,11 @@ public class BoletosPrefeituraController implements BoletosPrefeituraIController
     /**
      * Responsabilidade: Listar todos os boletos ativos gerados pela prefeitura.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os boletos com status ativo no sistema.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos boletos
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<BoletosPrefeituraResponseDto>> listarAtivos() {
         List<BoletosPrefeitura> ativos = boletoService.listarAtivos();
@@ -65,8 +72,12 @@ public class BoletosPrefeituraController implements BoletosPrefeituraIController
     /**
      * Responsabilidade: Buscar um boleto específico pelo ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se não encontrado ou inativo.
+     *
+     * @apiNote Busca um boleto pelo seu ID único.
+     * @param id identificador do boleto
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se não encontrado ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<BoletosPrefeituraResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -86,8 +97,13 @@ public class BoletosPrefeituraController implements BoletosPrefeituraIController
     /**
      * Responsabilidade: Atualizar integralmente os dados de vencimento e valor de um boleto.
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se não encontrado.
+     *
+     * @apiNote Atualiza os dados de um boleto existente.
+     * @param id identificador do boleto
+     * @param dto novos dados do boleto
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<BoletosPrefeituraResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody BoletosPrefeituraRequestDto dto) {
         try {
@@ -105,8 +121,12 @@ public class BoletosPrefeituraController implements BoletosPrefeituraIController
     /**
      * Responsabilidade: Inativar logicamente um boleto da prefeitura (ativo = false).
      * Status HTTP: Retorna 204 No Content se inativado; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Realiza a exclusão lógica do boleto (ativo = false).
+     * @param id identificador do boleto
+     * @return ResponseEntity com status 204 No Content se inativado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> inativar(@PathVariable Long id) {
         try {
@@ -123,8 +143,13 @@ public class BoletosPrefeituraController implements BoletosPrefeituraIController
     /**
      * Responsabilidade: Atualizar o status do boleto (PENDENTE, PAGO, VENCIDO).
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se inexistente.
+     *
+     * @apiNote Atualiza exclusivamente o status de um boleto (ex: PENDENTE, PAGO, VENCIDO).
+     * @param id identificador do boleto
+     * @param dto novo status desejado
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PatchMapping("/{id}/status")
     public ResponseEntity<BoletosPrefeituraResponseDto> atualizarStatus(@PathVariable Long id, @Valid @RequestBody BoletoStatusRequestDto dto) {
         try {
