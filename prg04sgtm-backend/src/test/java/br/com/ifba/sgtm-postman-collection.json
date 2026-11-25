@@ -1,681 +1,960 @@
 {
-    "info":  {
-                 "_postman_id":  "8bd8ce21-4c87-4a0f-a0cb-9ac95d339cb1",
-                 "name":  "SGTM - Sistema de Gerenciamento de Tributos Municipais",
-                 "description":  "Requisições REST do SGTM. Execute os POSTs na ordem das pastas para criar os registros relacionados. Os IDs são atualizados automaticamente pelas respostas de criação. Os DELETEs (exclusão lógica/estorno) estão na última pasta.",
-                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-             },
-    "variable":  [
-                     {
-                         "key":  "baseUrl",
-                         "value":  "http://localhost:8080/api/v1"
-                     },
-                     {
-                         "key":  "usuarioId",
-                         "value":  "1"
-                     },
-                     {
-                         "key":  "contribuinteId",
-                         "value":  "1"
-                     },
-                     {
-                         "key":  "imovelId",
-                         "value":  "1"
-                     },
-                     {
-                         "key":  "impostoId",
-                         "value":  "1"
-                     },
-                     {
-                         "key":  "lancamentoId",
-                         "value":  "1"
-                     },
-                     {
-                         "key":  "boletoId",
-                         "value":  "1"
-                     },
-                     {
-                         "key":  "pagamentoId",
-                         "value":  "1"
-                     }
-                 ],
-    "item":  [
-                 {
-                     "name":  "Usuários",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Criar usuário",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027usuarioId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"nome\": \"Fiscal de Tributos\",\n  \"login\": \"fiscal.teste\",\n  \"senha\": \"Fiscal123\",\n  \"nivelAcesso\": \"FISCAL\"\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/usuarios"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar usuários",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/usuarios"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar usuário por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/usuarios/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar usuário",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"nome\": \"Fiscal de Tributos\",\n  \"login\": \"fiscal.teste\",\n  \"senha\": \"Fiscal123\",\n  \"nivelAcesso\": \"FISCAL\"\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/usuarios/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "POST - Login",
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"login\": \"fiscal.teste\",\n  \"senha\": \"Fiscal123\"\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/usuarios/login"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "Contribuintes",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Criar contribuinte",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027contribuinteId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"nome\": \"Maria da Silva\",\n  \"cpfCnpj\": \"52998224725\",\n  \"telefone\": \"71999998888\",\n  \"email\": \"maria.silva@example.com\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"100\",\n    \"complemento\": \"Apto 2\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000000\"\n  }\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/contribuintes"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar contribuintes",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/contribuintes"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar contribuinte por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/contribuintes/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar contribuinte",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"nome\": \"Maria da Silva\",\n  \"cpfCnpj\": \"52998224725\",\n  \"telefone\": \"71999998888\",\n  \"email\": \"maria.silva@example.com\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"100\",\n    \"complemento\": \"Apto 2\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000000\"\n  }\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/contribuintes/1"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "Imóveis",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Criar imóvel",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027imovelId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"inscricaoImobiliaria\": \"0000000001\",\n  \"areaTerreno\": 250.0,\n  \"areaConstruida\": 120.0,\n  \"valorVenal\": 350000.0,\n  \"contribuinteId\": {{contribuinteId}},\n  \"endereco\": {\n    \"logradouro\": \"Avenida Municipal\",\n    \"numero\": \"200\",\n    \"complemento\": null,\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000001\"\n  }\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/imoveis"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar imóveis",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/imoveis"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar imóvel por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/imoveis/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar imóvel",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"inscricaoImobiliaria\": \"0000000001\",\n  \"areaTerreno\": 250.0,\n  \"areaConstruida\": 120.0,\n  \"valorVenal\": 350000.0,\n  \"contribuinteId\": {{contribuinteId}},\n  \"endereco\": {\n    \"logradouro\": \"Avenida Municipal\",\n    \"numero\": \"200\",\n    \"complemento\": null,\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000001\"\n  }\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/imoveis/1"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "Impostos",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Criar imposto IPTU",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027impostoId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"descricao\": \"IPTU 2026\",\n  \"anoExercicio\": 2026,\n  \"aliquotaTerreno\": 3.0,\n  \"aliquotaConstrucao\": 1.0\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/impostos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar impostos",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/impostos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar imposto por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/impostos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar imposto IPTU",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"descricao\": \"IPTU 2026\",\n  \"anoExercicio\": 2026,\n  \"aliquotaTerreno\": 3.0,\n  \"aliquotaConstrucao\": 1.0\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/impostos/1"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "Lançamentos",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Criar lançamento de imposto",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027lancamentoId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"imovelId\": {{imovelId}},\n  \"impostoId\": {{impostoId}},\n  \"quantidadeParcelas\": 12\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/lancamentos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar lançamentos",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/lancamentos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar lançamento por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/lancamentos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar lançamento",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"imovelId\": {{imovelId}},\n  \"impostoId\": {{impostoId}},\n  \"quantidadeParcelas\": 12\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/lancamentos/1"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "Boletos",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Criar boleto",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027boletoId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"numeroCodigoBarras\": null,\n  \"valorBoleto\": 3500.0,\n  \"dataVencimento\": \"2027-12-31\",\n  \"status\": \"PENDENTE\",\n  \"lancamentoId\": {{lancamentoId}}\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/boletos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar boletos",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/boletos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar boleto por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/boletos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar boleto",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"numeroCodigoBarras\": null,\n  \"valorBoleto\": 3500.0,\n  \"dataVencimento\": \"2027-12-31\",\n  \"status\": \"PENDENTE\",\n  \"lancamentoId\": {{lancamentoId}}\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/boletos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PATCH - Atualizar status do boleto",
-                                      "request":  {
-                                                      "method":  "PATCH",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"status\": \"PENDENTE\"\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/boletos/1/status"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "Pagamentos",
-                     "item":  [
-                                  {
-                                      "name":  "POST - Registrar pagamento",
-                                      "event":  [
-                                                    {
-                                                        "listen":  "test",
-                                                        "script":  {
-                                                                       "type":  "text/javascript",
-                                                                       "exec":  [
-                                                                                    "if (pm.response.code === 201) {",
-                                                                                    "  const resposta = pm.response.json();",
-                                                                                    "  if (resposta.id !== undefined) pm.collectionVariables.set(\u0027pagamentoId\u0027, resposta.id);",
-                                                                                    "}"
-                                                                                ]
-                                                                   }
-                                                    }
-                                                ],
-                                      "request":  {
-                                                      "method":  "POST",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"boletoId\": {{boletoId}},\n  \"usuarioId\": {{usuarioId}}\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/pagamentos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Listar pagamentos",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/pagamentos"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "GET - Buscar pagamento por ID",
-                                      "request":  {
-                                                      "method":  "GET",
-                                                      "url":  "http://localhost:8080/api/v1/pagamentos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "PUT - Atualizar pagamento",
-                                      "request":  {
-                                                      "method":  "PUT",
-                                                      "header":  [
-                                                                     {
-                                                                         "key":  "Content-Type",
-                                                                         "value":  "application/json"
-                                                                     }
-                                                                 ],
-                                                      "body":  {
-                                                                   "mode":  "raw",
-                                                                   "raw":  "{\n  \"boletoId\": {{boletoId}},\n  \"usuarioId\": {{usuarioId}}\n}",
-                                                                   "options":  {
-                                                                                   "raw":  {
-                                                                                               "language":  "json"
-                                                                                           }
-                                                                               }
-                                                               },
-                                                      "url":  "http://localhost:8080/api/v1/pagamentos/1"
-                                                  }
-                                  }
-                              ]
-                 },
-                 {
-                     "name":  "DELETEs - Exclusão lógica e estorno (executar por último)",
-                     "item":  [
-                                  {
-                                      "name":  "DELETE - Estornar pagamento",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/pagamentos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "DELETE - Inativar boleto",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/boletos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "DELETE - Inativar lançamento",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/lancamentos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "DELETE - Inativar imposto",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/impostos/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "DELETE - Inativar imóvel",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/imoveis/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "DELETE - Inativar contribuinte",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/contribuintes/1"
-                                                  }
-                                  },
-                                  {
-                                      "name":  "DELETE - Inativar usuário",
-                                      "request":  {
-                                                      "method":  "DELETE",
-                                                      "url":  "http://localhost:8080/api/v1/usuarios/1"
-                                                  }
-                                  }
-                              ]
-                 }
-             ]
+  "info": {
+    "_postman_id": "8bd8ce21-4c87-4a0f-a0cb-9ac95d339cb1",
+    "name": "SGTM - Sistema de Gerenciamento de Tributos Municipais",
+    "description": "Requisições REST do SGTM. Execute os POSTs na ordem das pastas para criar os registros relacionados. Os IDs e dados únicos são gerados e atualizados automaticamente para garantir idempotência.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "usuarioId", "value": "1" },
+    { "key": "usuarioLogin", "value": "fiscal.teste" },
+    { "key": "contribuinteId", "value": "1" },
+    { "key": "contribuinteCpfCnpj", "value": "52998224725" },
+    { "key": "contribuinteEmail", "value": "maria.silva@example.com" },
+    { "key": "imovelId", "value": "1" },
+    { "key": "imovelInscricao", "value": "0000000001" },
+    { "key": "impostoId", "value": "1" },
+    { "key": "lancamentoId", "value": "1" },
+    { "key": "boletoId", "value": "1" },
+    { "key": "pagamentoId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "POST - Criar usuário",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const sufixo = Math.floor(100000 + Math.random() * 899999);",
+                  "pm.collectionVariables.set('usuarioLogin', 'fiscal.' + sufixo);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('usuarioId', resposta.id);",
+                  "  if (resposta.login !== undefined) pm.collectionVariables.set('usuarioLogin', resposta.login);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Fiscal de Tributos\",\n  \"login\": \"{{usuarioLogin}}\",\n  \"senha\": \"Fiscal123\",\n  \"nivelAcesso\": \"FISCAL\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/usuarios"
+          }
+        },
+        {
+          "name": "GET - Listar usuários",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/usuarios"
+          }
+        },
+        {
+          "name": "GET - Buscar usuário por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/usuarios/{{usuarioId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Fiscal de Tributos Atualizado\",\n  \"login\": \"{{usuarioLogin}}\",\n  \"senha\": \"Fiscal123\",\n  \"nivelAcesso\": \"FISCAL\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/usuarios/{{usuarioId}}"
+          }
+        },
+        {
+          "name": "POST - Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{usuarioLogin}}\",\n  \"senha\": \"Fiscal123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/usuarios/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contribuintes",
+      "item": [
+        {
+          "name": "POST - Criar contribuinte",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const cpf = String(Math.floor(10000000000 + Math.random() * 89999999999));",
+                  "pm.collectionVariables.set('contribuinteCpfCnpj', cpf);",
+                  "pm.collectionVariables.set('contribuinteEmail', 'maria.' + cpf + '@example.com');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('contribuinteId', resposta.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria da Silva\",\n  \"cpfCnpj\": \"{{contribuinteCpfCnpj}}\",\n  \"telefone\": \"71999998888\",\n  \"email\": \"{{contribuinteEmail}}\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"100\",\n    \"complemento\": \"Apto 2\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000000\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/contribuintes"
+          }
+        },
+        {
+          "name": "GET - Listar contribuintes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/contribuintes"
+          }
+        },
+        {
+          "name": "GET - Buscar contribuinte por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/contribuintes/{{contribuinteId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar contribuinte",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria da Silva Atualizada\",\n  \"cpfCnpj\": \"{{contribuinteCpfCnpj}}\",\n  \"telefone\": \"71999998888\",\n  \"email\": \"{{contribuinteEmail}}\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"100\",\n    \"complemento\": \"Apto 2\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000000\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/contribuintes/{{contribuinteId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Imóveis",
+      "item": [
+        {
+          "name": "POST - Criar imóvel",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const inscricao = String(Math.floor(1000000000 + Math.random() * 8999999999));",
+                  "pm.collectionVariables.set('imovelInscricao', inscricao);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('imovelId', resposta.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inscricaoImobiliaria\": \"{{imovelInscricao}}\",\n  \"areaTerreno\": 250.0,\n  \"areaConstruida\": 120.0,\n  \"valorVenal\": 350000.0,\n  \"contribuinteId\": {{contribuinteId}},\n  \"endereco\": {\n    \"logradouro\": \"Avenida Municipal\",\n    \"numero\": \"200\",\n    \"complemento\": null,\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000001\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/imoveis"
+          }
+        },
+        {
+          "name": "GET - Listar imóveis",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/imoveis"
+          }
+        },
+        {
+          "name": "GET - Buscar imóvel por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/imoveis/{{imovelId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar imóvel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inscricaoImobiliaria\": \"{{imovelInscricao}}\",\n  \"areaTerreno\": 250.0,\n  \"areaConstruida\": 120.0,\n  \"valorVenal\": 350000.0,\n  \"contribuinteId\": {{contribuinteId}},\n  \"endereco\": {\n    \"logradouro\": \"Avenida Municipal\",\n    \"numero\": \"200\",\n    \"complemento\": null,\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Salvador\",\n    \"estado\": \"BA\",\n    \"cep\": \"40000001\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/imoveis/{{imovelId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Impostos",
+      "item": [
+        {
+          "name": "POST - Criar imposto IPTU",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('impostoId', resposta.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"IPTU 2026\",\n  \"anoExercicio\": 2026,\n  \"aliquotaTerreno\": 3.0,\n  \"aliquotaConstrucao\": 1.0\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/impostos"
+          }
+        },
+        {
+          "name": "GET - Listar impostos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/impostos"
+          }
+        },
+        {
+          "name": "GET - Buscar imposto por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/impostos/{{impostoId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar imposto IPTU",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"IPTU 2026\",\n  \"anoExercicio\": 2026,\n  \"aliquotaTerreno\": 3.0,\n  \"aliquotaConstrucao\": 1.0\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/impostos/{{impostoId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lançamentos",
+      "item": [
+        {
+          "name": "POST - Criar lançamento de imposto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('lancamentoId', resposta.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imovelId\": {{imovelId}},\n  \"impostoId\": {{impostoId}},\n  \"quantidadeParcelas\": 12\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/lancamentos"
+          }
+        },
+        {
+          "name": "GET - Listar lançamentos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/lancamentos"
+          }
+        },
+        {
+          "name": "GET - Buscar lançamento por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/lancamentos/{{lancamentoId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar lançamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imovelId\": {{imovelId}},\n  \"impostoId\": {{impostoId}},\n  \"quantidadeParcelas\": 12\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/lancamentos/{{lancamentoId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Boletos",
+      "item": [
+        {
+          "name": "POST - Criar boleto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('boletoId', resposta.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCodigoBarras\": null,\n  \"valorBoleto\": 3500.0,\n  \"dataVencimento\": \"2027-12-31\",\n  \"status\": \"PENDENTE\",\n  \"lancamentoId\": {{lancamentoId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/boletos"
+          }
+        },
+        {
+          "name": "GET - Listar boletos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/boletos"
+          }
+        },
+        {
+          "name": "GET - Buscar boleto por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/boletos/{{boletoId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar boleto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCodigoBarras\": null,\n  \"valorBoleto\": 3500.0,\n  \"dataVencimento\": \"2027-12-31\",\n  \"status\": \"PENDENTE\",\n  \"lancamentoId\": {{lancamentoId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/boletos/{{boletoId}}"
+          }
+        },
+        {
+          "name": "PATCH - Atualizar status do boleto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PENDENTE\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/boletos/{{boletoId}}/status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pagamentos",
+      "item": [
+        {
+          "name": "POST - Registrar pagamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  const resposta = pm.response.json();",
+                  "  if (resposta.id !== undefined) pm.collectionVariables.set('pagamentoId', resposta.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"boletoId\": {{boletoId}},\n  \"usuarioId\": {{usuarioId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/pagamentos"
+          }
+        },
+        {
+          "name": "GET - Listar pagamentos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pagamentos"
+          }
+        },
+        {
+          "name": "GET - Buscar pagamento por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pagamentos/{{pagamentoId}}"
+          }
+        },
+        {
+          "name": "PUT - Atualizar pagamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"boletoId\": {{boletoId}},\n  \"usuarioId\": {{usuarioId}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/pagamentos/{{pagamentoId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETEs - Exclusão lógica e estorno (executar por último)",
+      "item": [
+        {
+          "name": "DELETE - Estornar pagamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/pagamentos/{{pagamentoId}}"
+          }
+        },
+        {
+          "name": "DELETE - Inativar boleto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/boletos/{{boletoId}}"
+          }
+        },
+        {
+          "name": "DELETE - Inativar lançamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/lancamentos/{{lancamentoId}}"
+          }
+        },
+        {
+          "name": "DELETE - Inativar imposto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/impostos/{{impostoId}}"
+          }
+        },
+        {
+          "name": "DELETE - Inativar imóvel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/imoveis/{{imovelId}}"
+          }
+        },
+        {
+          "name": "DELETE - Inativar contribuinte",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/contribuintes/{{contribuinteId}}"
+          }
+        },
+        {
+          "name": "DELETE - Inativar usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/usuarios/{{usuarioId}}"
+          }
+        }
+      ]
+    }
+  ]
 }
