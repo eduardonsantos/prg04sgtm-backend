@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/lancamentos")
-public class LancamentoImpostoController implements LancamentoImpostoIController {
+public class LancamentoImpostoController {
 
     private final LancamentoImpostoIService lancamentoService;
 
@@ -37,8 +37,12 @@ public class LancamentoImpostoController implements LancamentoImpostoIController
     /**
      * Responsabilidade: Realizar o lançamento tributário de um imóvel, calculando o valor venal e gerando boletos.
      * Status HTTP: Retorna 201 Created com o DTO do lançamento persistido.
+     *
+     * @apiNote Realiza um novo lançamento de imposto para um imóvel, gerando seus boletos parcelados.
+     * @param dto dados do lançamento com ID do imóvel, ID do imposto e quantidade de parcelas
+     * @return ResponseEntity com status 201 Created e o DTO do lançamento criado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<LancamentoImpostoResponseDto> salvar(@Valid @RequestBody LancamentoImpostoRequestDto dto) {
         LancamentoImposto entity = dto.paraEntidade();
@@ -49,8 +53,11 @@ public class LancamentoImpostoController implements LancamentoImpostoIController
     /**
      * Responsabilidade: Listar todos os lançamentos de impostos ativos.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os lançamentos de imposto ativos.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos lançamentos
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<LancamentoImpostoResponseDto>> listarAtivos() {
         List<LancamentoImposto> ativos = lancamentoService.listarAtivos();
@@ -63,8 +70,12 @@ public class LancamentoImpostoController implements LancamentoImpostoIController
     /**
      * Responsabilidade: Buscar um lançamento de imposto específico pelo ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se inexistente ou inativo.
+     *
+     * @apiNote Busca um lançamento de imposto pelo seu ID.
+     * @param id identificador do lançamento
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se inexistente ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<LancamentoImpostoResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -84,8 +95,13 @@ public class LancamentoImpostoController implements LancamentoImpostoIController
     /**
      * Responsabilidade: Atualizar as informações de cálculo ou tributo de um lançamento existente.
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se não encontrado.
+     *
+     * @apiNote Atualiza um lançamento de imposto existente.
+     * @param id identificador do lançamento
+     * @param dto dados para atualização
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<LancamentoImpostoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody LancamentoImpostoRequestDto dto) {
         try {
@@ -103,8 +119,12 @@ public class LancamentoImpostoController implements LancamentoImpostoIController
     /**
      * Responsabilidade: Inativar logicamente um lançamento de imposto (ativo = false).
      * Status HTTP: Retorna 204 No Content se inativado; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Inativa logicamente o lançamento de imposto (ativo = false).
+     * @param id identificador do lançamento
+     * @return ResponseEntity com status 204 No Content se inativado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> inativar(@PathVariable Long id) {
         try {
