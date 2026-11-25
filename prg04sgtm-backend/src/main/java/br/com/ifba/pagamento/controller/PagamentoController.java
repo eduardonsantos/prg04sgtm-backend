@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/pagamentos")
-public class PagamentoController implements PagamentoIController {
+public class PagamentoController {
 
     private final PagamentoIService pagamentoService;
 
@@ -39,8 +39,12 @@ public class PagamentoController implements PagamentoIController {
     /**
      * Responsabilidade: Registrar baixa manual de pagamento em um boleto da prefeitura.
      * Status HTTP: Retorna 201 Created com o DTO do pagamento gerado.
+     *
+     * @apiNote Registra a baixa manual de pagamento de um boleto por um usuário operador.
+     * @param dto dados contendo o ID do boleto e o ID do usuário operador
+     * @return ResponseEntity com status 201 Created e o DTO do pagamento registrado
+     * @author eduardo
      */
-    @Override
     @PostMapping
     public ResponseEntity<PagamentoResponseDto> salvar(@Valid @RequestBody PagamentoRequestDto dto) {
         Pagamento salvo = pagamentoService.salvar(dto.boletoId(), dto.usuarioId());
@@ -50,8 +54,11 @@ public class PagamentoController implements PagamentoIController {
     /**
      * Responsabilidade: Listar todos os pagamentos ativos registrados no sistema.
      * Status HTTP: Retorna 200 OK com a lista de DTOs.
+     *
+     * @apiNote Lista todos os pagamentos com status ativo.
+     * @return ResponseEntity com status 200 OK e a lista de DTOs dos pagamentos
+     * @author eduardo
      */
-    @Override
     @GetMapping
     public ResponseEntity<List<PagamentoResponseDto>> listarAtivos() {
         List<Pagamento> ativos = pagamentoService.listarAtivos();
@@ -64,8 +71,12 @@ public class PagamentoController implements PagamentoIController {
     /**
      * Responsabilidade: Buscar um pagamento específico por ID.
      * Status HTTP: Retorna 200 OK se encontrado e ativo; retorna 404 Not Found se não existir ou inativo.
+     *
+     * @apiNote Busca um pagamento pelo seu ID.
+     * @param id identificador do pagamento
+     * @return ResponseEntity com status 200 OK ou 404 Not Found se inexistente ou inativo
+     * @author eduardo
      */
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<PagamentoResponseDto> buscarPorId(@PathVariable Long id) {
         try {
@@ -85,8 +96,13 @@ public class PagamentoController implements PagamentoIController {
     /**
      * Responsabilidade: Atualizar dados de um registro de pagamento.
      * Status HTTP: Retorna 200 OK com o DTO atualizado; retorna 404 Not Found se não existir.
+     *
+     * @apiNote Atualiza dados de um pagamento existente.
+     * @param id identificador do pagamento
+     * @param dto dados do pagamento
+     * @return ResponseEntity com status 200 OK e o DTO atualizado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @PutMapping("/{id}")
     public ResponseEntity<PagamentoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody PagamentoRequestDto dto) {
         try {
@@ -110,8 +126,12 @@ public class PagamentoController implements PagamentoIController {
     /**
      * Responsabilidade: Realizar o estorno do pagamento (inativa o pagamento e reabre o boleto como PENDENTE).
      * Status HTTP: Retorna 204 No Content após o estorno; retorna 404 Not Found se id inexistente.
+     *
+     * @apiNote Realiza o estorno do pagamento (inativação lógica com ativo = false e retorno do boleto para PENDENTE).
+     * @param id identificador do pagamento
+     * @return ResponseEntity com status 204 No Content se estornado, ou 404 Not Found
+     * @author eduardo
      */
-    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> estornar(@PathVariable Long id) {
         try {
